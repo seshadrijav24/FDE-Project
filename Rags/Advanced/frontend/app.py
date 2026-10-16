@@ -71,7 +71,7 @@ with st.sidebar:
     st.caption("Vector database: ChromaDB")
     st.caption("LLM: Claude")
 
-# Display previous messages
+# Display previous messageshgg
 for message in st.session_state.messages:
     with st.chat_message(message["role"]):
         st.markdown(message["content"])
