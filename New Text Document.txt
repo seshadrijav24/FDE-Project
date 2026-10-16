@@ -1,0 +1,191 @@
+> cd RAGS
+> cd naive
+> cd backend
+> python -m venv venv
+> source venv/bin/activate(mac book)      venv\Scripts\activate (windows)
+> pip install -r requirements.txt
+> uvicorn main:app --reload
+> http://127.0.0.1/docs
+>streamlit run app.py
+
+
+
+corrective
+**********
+
+1) right click
+
+2) env ()
+
+Agentic AI
+      100 + files
+
+agentic-ai
+        backend
+            100 +
+
+        frontend
+              20 +
+
+        docker
+            2 +
+
+        k8n
+            2+
+
+        monitoring
+            5+ 
+
+        azure
+            1+
+ 
+
+
+
+
+
+
+naive
+    backend
+        .env (API Keys)
+        requirements.txt (libraries)
+        main.py (naive code) (indexing & search)
+
+> cd RAGS
+> cd naive
+> cd backend
+> python -m venv venv
+> source venv/bin/activate(mac book)      venv\Scripts\activate (windows)
+> pip install -r requirements.txt
+> uvicorn main:app --reload
+> http://127.0.0.1/docs
+
+--------------------------------------------------------------------------------
+cd RAGS
+cd naive
+> npm create vite@latest
+    project name : frontend
+    framework : React
+    varient : JavaScript
+    Lint : OxLint
+    Yes
+    Yes
+
+    
+Note : frontend is the name of the application
+kill : ctrl + c
+
+cd frontend
+npm install axios (connect to fastapi)
+
+frontend
+      src
+        App.jsx (React Code)
+        App.css (CSS Code)
+
+        assets
+            logo.jpeg
+
+    
+
+
+
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+RAG
+***
+  retrieval agumented generation
+
+
+
+
+
+
+
+
+Question	Expected answer
+How long is the RAG module?	2 weeks
+What topics are covered in Generative AI?	Tokens, embeddings, transformers, prompts, and LLMs
+Which tool is used for vector similarity search?	FAISS
+What is the RAG mini project?	Upload a PDF and ask questions about its contents
+Tip: First upload the PDF, then ask the questions. Your current application keeps the document index in memory, so upload it again whenever you restart the server.
+
+
+App.jsx
+import { useRef, useState } from "react";
+import "./App.css";
+
+const API_URL = "http://127.0.0.1:8000";
+
+export default function App() {
+  const fileInput = useRef(null);
+
+  const [file, setFile] = useState(null);
+  const [uploading, setUploading] = useState(false);
+  const [uploaded, setUploaded] = useState(false);
+  const [uploadInfo, setUploadInfo] = useState(null);
+  const [question, setQuestion] = useState("");
+  const [messages, setMessages] = useState([]);
+  const [asking, setAsking] = useState(false);
+  const [error, setError] = useState("");
+  const [showChunks, setShowChunks] = useState(false);
+
+  async function uploadPDF() {
+    if (!file) {
+      setError("Please select a PDF file first.");
+      return;
+    }
+
+    setUploading(true);
+    setError("");
+    setUploaded(false);
+    setUploadInfo(null);
+    setMessages([]);
+    setShowChunks(false);
+
+    const formData = new FormData();
+    formData.append("file", file);
+
+    try {
+      const response = await fetch(`${API_URL}/upload-pdf`, {
+        method: "POST",
+        body: formData,
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.detail || "PDF upload failed.");
+      }
+
+      setUploaded(true);
+      setUploadInfo(data);
+    } catch (err) {
+      setError(
+        err.message || "Cannot connect to the backend. Is FastAPI running?"
+      );
+    } finally {
+      setUploading(false);
+    }
+  }
+
+  async function askQuestion(text = question) {
+    const userQuestion = text.trim();
+
