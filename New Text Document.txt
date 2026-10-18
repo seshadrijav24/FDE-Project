@@ -78,7 +78,6 @@ kill : ctrl + c
 cd frontend
 npm install axios (connect to fastapi)
 
-
 frontend
       src
         App.jsx (React Code)
